@@ -1,34 +1,51 @@
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { Link, router } from "expo-router";
 import { api } from "../../src/services/api";
 
-export default function Login() {
+export default function Register() {
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  async function handleLogin() {
-    //  por enquanto é apenas estático
-    console.log("Tentando login:", email, senha);
+  async function handleRegister() {
+    // 🔒 Futuro: integração com API
+    // await api.post("/auth/register", { nome, email, senha });
 
-    router.push("/home"); 
+    console.log("Cadastrando:", { nome, email, senha });
+
+    router.push("/login"); // leva para tela de login após cadastrar
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        
         {/* Ícone */}
         <View style={styles.iconCircle}>
           <Text style={styles.iconHeart}>💙</Text>
         </View>
 
-        <Text style={styles.title}>Bem-vindo de volta</Text>
+        <Text style={styles.title}>Crie sua conta</Text>
         <Text style={styles.subtitle}>
-          Entre para gerenciar seu estresse e tarefas
+          Comece a monitorar seu bem-estar hoje
         </Text>
 
-        {/* E-mail */}
+        {/* Nome */}
+        <Text style={styles.label}>Nome completo</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="João Silva"
+          value={nome}
+          onChangeText={setNome}
+        />
+
+        {/* Email */}
         <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
@@ -47,20 +64,16 @@ export default function Login() {
           onChangeText={setSenha}
         />
 
-        <TouchableOpacity style={styles.forgotBtn}>
-          <Text style={styles.forgotText}>Esqueceu a senha?</Text>
+        {/* Botão */}
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <Text style={styles.buttonText}>Criar conta</Text>
         </TouchableOpacity>
 
-        {/* Botão Entrar */}
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
-
-        {/* Cadastro */}
+        {/* Link de login */}
         <Text style={styles.registerText}>
-          Não tem uma conta?{" "}
-          <Link href="/cadastro">
-            <Text style={styles.registerLink}>Cadastre-se</Text>
+          Já tem uma conta?{" "}
+          <Link href="/login">
+            <Text style={styles.registerLink}>Entrar</Text>
           </Link>
         </Text>
       </View>
@@ -107,7 +120,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textAlign: "center",
   },
-
   label: {
     alignSelf: "flex-start",
     marginLeft: 5,
@@ -123,29 +135,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 15,
   },
-
-  forgotBtn: {
-    alignSelf: "flex-end",
-  },
-  forgotText: {
-    color: "#3169E9",
-    marginBottom: 15,
-  },
-
   button: {
     backgroundColor: "#0A63C2",
     width: "100%",
     padding: 13,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: 5,
+    marginTop: 15,
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
   },
-
   registerText: {
     marginTop: 18,
     color: "#555",
