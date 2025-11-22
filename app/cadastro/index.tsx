@@ -7,21 +7,23 @@ import {
   StyleSheet,
 } from "react-native";
 import { Link, router } from "expo-router";
-import { api } from "../../src/services/api";
+import { register } from "../../src/services/authService";
 
 export default function Register() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  async function handleRegister() {
-    // 🔒 Futuro: integração com API
-    // await api.post("/auth/register", { nome, email, senha });
+async function handleRegister() {
+  try {
+    const usuario = await register(nome, email, senha);
+    console.log("Usuário criado:", usuario);
 
-    console.log("Cadastrando:", { nome, email, senha });
-
-    router.push("/login"); // leva para tela de login após cadastrar
+    router.replace("/login");
+  } catch (err) {
+    console.log("Erro ao cadastrar", err);
   }
+}
 
   return (
     <View style={styles.container}>

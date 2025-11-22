@@ -1,18 +1,22 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { Link, router } from "expo-router";
-import { api } from "../../src/services/api";
+import { login } from "../../src/services/authService";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  async function handleLogin() {
-    //  por enquanto é apenas estático
-    console.log("Tentando login:", email, senha);
+async function handleLogin() {
+  try {
+    const token = await login(email, senha);
+    console.log("TOKEN:", token);
 
-    router.push("/home"); 
+    router.replace("/home");
+  } catch (err) {
+    console.log("Erro ao fazer login", err);
   }
+}
 
   return (
     <View style={styles.container}>
