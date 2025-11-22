@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 export default function SectionHeader() {
   return (
@@ -11,7 +12,10 @@ export default function SectionHeader() {
         </Text>
       </View>
 
-      <TouchableOpacity style={styles.newTaskButton}>
+      <TouchableOpacity
+        style={styles.newTaskButton}
+        onPress={() => router.push("/new-task")}
+      >
         <Ionicons name="add" size={20} color="#000" />
         <Text style={styles.newTaskText}>Nova Tarefa</Text>
       </TouchableOpacity>

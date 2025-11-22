@@ -2,8 +2,8 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import TaskItem from "../TaskItem/TaskItem";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function TaskList({ tarefas }) {
-  if (tarefas.length === 0) {
+export default function TaskList({ tarefas, reload }) {
+  if (!tarefas || tarefas.length === 0) {
     return (
       <View style={styles.emptyBox}>
         <Ionicons name="clipboard-outline" size={40} color="#B0B6C4" />
@@ -15,8 +15,12 @@ export default function TaskList({ tarefas }) {
   return (
     <FlatList
       data={tarefas}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <TaskItem item={item} />}
+      keyExtractor={(item) => String(item.id)}
+      renderItem={({ item }) => (
+        <TaskItem item={item} onDelete={reload} />
+      )}
+      contentContainerStyle={{ paddingBottom: 120 }}
+      showsVerticalScrollIndicator={false}
     />
   );
 }

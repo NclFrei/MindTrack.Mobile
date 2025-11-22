@@ -18,7 +18,6 @@ export default function HomeHeader() {
 
   function handleLogout() {
     setMenuVisible(false);
-    // Futuro: limpar token do AsyncStorage
     router.replace("/login");
   }
 
@@ -36,7 +35,6 @@ export default function HomeHeader() {
 
       {/* Centro */}
       <View style={styles.centerBox}>
-        {/* BPM */}
         <View style={styles.item}>
           <Ionicons name="heart-outline" size={20} color="#FF6B6B" />
           <Text style={styles.value}>72</Text>
@@ -45,7 +43,6 @@ export default function HomeHeader() {
 
         <View style={styles.divider} />
 
-        {/* HRV */}
         <View style={styles.item}>
           <Ionicons name="pulse-outline" size={20} color="#A56BFF" />
           <Text style={styles.value}>65</Text>
@@ -53,16 +50,26 @@ export default function HomeHeader() {
         </View>
       </View>
 
-      {/* Ícone usuário */}
+      {/* Ícone do usuário */}
       <TouchableOpacity style={styles.userIcon} onPress={toggleMenu}>
         <Ionicons name="person-circle-outline" size={36} color="#C9D6E8" />
       </TouchableOpacity>
 
-      {/* Menu Pop-up */}
+      {/* MENU POPUP */}
       {menuVisible && (
-        <Pressable style={styles.overlay} onPress={() => setMenuVisible(false)}>
+        <>
+          {/* Overlay para fechar o menu */}
+          <Pressable
+            style={styles.overlay}
+            onPress={() => setMenuVisible(false)}
+          />
+
+          {/* Menu suspenso */}
           <View style={styles.menu}>
-            <TouchableOpacity style={styles.menuItem} onPress={handleEditProfile}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={handleEditProfile}
+            >
               <Ionicons name="create-outline" size={18} color="#444" />
               <Text style={styles.menuText}>Editar perfil</Text>
             </TouchableOpacity>
@@ -74,7 +81,7 @@ export default function HomeHeader() {
               <Text style={styles.menuText}>Sair</Text>
             </TouchableOpacity>
           </View>
-        </Pressable>
+        </>
       )}
     </View>
   );
@@ -88,6 +95,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingTop: 15,
     paddingBottom: 5,
+    position: "relative", 
+    zIndex: 50,
   },
 
   leftIcon: {
@@ -147,19 +156,22 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    zIndex: 998,
+    backgroundColor: "transparent",
   },
 
   menu: {
     position: "absolute",
-    top: 55,
+    top: 65,
     right: 15,
     backgroundColor: "#fff",
     width: 180,
     borderRadius: 12,
     paddingVertical: 8,
-    elevation: 5,
+    elevation: 10,      
+    zIndex: 999,        
     shadowColor: "#000",
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.2,
     shadowRadius: 10,
   },
 
