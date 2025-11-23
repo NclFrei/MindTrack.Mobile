@@ -12,21 +12,26 @@ import SectionHeader from "../../src/components/SectionHeader/SectionHeader";
 import TaskList from "../../src/components/TaskList/TaskList";
 
 import { getTarefasByUser } from "../../src/services/tarefaService";
+import { getStressScoreByUserId } from "../../src/services/healthService";
 
 export default function Home() {
   const params = useLocalSearchParams();
   const [refreshKey, setRefreshKey] = useState(0);
 
   const [tarefas, setTarefas] = useState([]);
+  const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true);
 
   async function carregarTarefas() {
     setLoading(true);
     try {
       const lista = await getTarefasByUser();
+      const scoreValue = await getStressScoreByUserId();
+
       setTarefas(lista);
+      setScore(scoreValue);
     } catch (error) {
-      console.log("Erro ao carregar tarefas:", error);
+      console.log("Erro ao carregar dados:", error);
     } finally {
       setLoading(false);
     }
@@ -50,19 +55,51 @@ export default function Home() {
     setTarefas((prev) => prev.filter((t) => t.id !== id));
   }
 
+  function reorganizarTarefasAI() {
+  setTarefas((prev) => {
+    // cria uma cópia da lista
+    const novaLista = [...prev];
+
+    // embaralhar (algoritmo Fisher-Yates)
+    for (let i = novaLista.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [novaLista[i], novaLista[j]] = [novaLista[j], novaLista[i]];
+    }
+
+    return novaLista;
+  });
+
+  console.log("Tarefas reorganizadas pela IA!");
+}
+
+  // Determinar nível do estresse
+  const nivel =
+    score < 34 ? "Baixo" :
+    score < 67 ? "Médio" :
+    "Alto";
+
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <HomeHeader />
 
       <View style={styles.content}>
-        {/* Stress score */}
-        <StressScoreCard score={0} nivel="Baixo" />
+        
+        {/* Stress Score Card */}
+        <StressScoreCard score={score} nivel={nivel} />
 
         {/* Recomendação da IA */}
-        <AIRecommendationCard text="Seu nível de estresse está baixo. Este é um ótimo momento para tarefas desafiadoras!" />
+        <AIRecommendationCard 
+          text={
+            nivel === "Baixo"
+              ? "Seu nível de estresse está baixo. Que tal realizar tarefas desafiadoras?"
+              : nivel === "Médio"
+              ? "Você está moderado. Reorganize suas tarefas para manter equilíbrio."
+              : "Nível alto! Priorize descanso e tarefas leves."
+          } 
+        />
 
         {/* Botão da IA */}
-        <AIButton onPress={() => console.log("IA reorganizou")} />
+        <AIButton onPress={reorganizarTarefasAI} />
 
         {/* Header de seção */}
         <SectionHeader />
