@@ -12,19 +12,27 @@ export async function getStressScoreByUserId() {
   try {
     const userId = await AsyncStorage.getItem("userId");
 
-    if (!userId) return Math.floor(Math.random() * 100) + 1;
+    // Se não tiver userId → gera aleatório
+    if (!userId) {
+      return Math.floor(Math.random() * 100) + 1;
+    }
 
     const res = await api.get(`/api/v1/Health/scores/${userId}`);
 
     const data = res.data as StressScoreResponse | null;
 
-    if (!data || !data.score || data.score < 1 || data.score > 100) {
+    // Verifica se veio algo inválido ou score fora do range
+    if (!data || typeof data.score !== "number" || data.score < 1 || data.score > 100) {
       return Math.floor(Math.random() * 100) + 1;
     }
 
     return data.score;
+
   } catch (error) {
     console.log("Erro ao buscar stress score:", error);
+
+    // Em caso de erro → aleatório
     return Math.floor(Math.random() * 100) + 1;
   }
 }
+

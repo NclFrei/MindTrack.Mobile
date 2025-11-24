@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { getTarefaById, updateTarefa } from "../../src/services/tarefaService";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EditTask() {
   const { id } = useLocalSearchParams();
@@ -12,7 +20,6 @@ export default function EditTask() {
   const [dificuldade, setDificuldade] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  // CARREGAR A TAREFA DO BACKEND
   useEffect(() => {
     async function load() {
       try {
@@ -46,11 +53,24 @@ export default function EditTask() {
     });
   }
 
+  function voltar() {
+    router.back();
+  }
+
   if (loading) return <Text>Carregando tarefa...</Text>;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Editar Tarefa</Text>
+    <SafeAreaView style={styles.container}>
+      {/* HEADER */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={voltar} style={styles.backButton}>
+          <Ionicons name="chevron-back" size={26} color="#333" />
+        </TouchableOpacity>
+
+        <Text style={styles.headerTitle}>Editar Tarefa</Text>
+
+        <View style={{ width: 26 }} />
+      </View>
 
       <TextInput style={styles.input} value={titulo} onChangeText={setTitulo} />
 
@@ -77,13 +97,26 @@ export default function EditTask() {
       <TouchableOpacity style={styles.button} onPress={salvar}>
         <Text style={styles.buttonText}>Salvar alterações</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#F3F6FF" },
-  title: { fontSize: 24, fontWeight: "700", marginBottom: 20 },
+
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  backButton: { marginRight: 10 },
+
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+  },
+
   input: {
     backgroundColor: "#FFF",
     padding: 12,
@@ -92,6 +125,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#DDD",
   },
+
   button: {
     backgroundColor: "#7B2FFF",
     padding: 15,
@@ -99,5 +133,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
+
   buttonText: { color: "#FFF", fontWeight: "700", fontSize: 16 },
 });

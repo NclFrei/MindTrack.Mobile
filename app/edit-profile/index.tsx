@@ -1,49 +1,69 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { api } from "../../src/services/api";
+import { getUserById, updateUser } from "../../src/services/userService";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 export default function EditProfile() {
-  const [nome, setNome] = useState("João Silva");
-  const [email, setEmail] = useState("seu@email.com");
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  function handleBack() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const user = await getUserById();
+
+        setNome(user.nome);
+        setEmail(user.email);
+      } catch (err) {
+        console.log("Erro ao carregar user:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+  }, []);
+
+  function voltar() {
     router.back();
   }
 
-  async function handleSave() {
-    // FUTURO 🔒 integração com API
-    // await api.put("/user/update", { nome, email, senha })
+  async function salvar() {
+    await updateUser({ nome, email, password: senha });
 
-    console.log("Salvando alterações:", { nome, email, senha });
     router.back();
   }
+
+  if (loading) return <Text>Carregando...</Text>;
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
+      {/* HEADER */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+        <TouchableOpacity onPress={voltar} style={styles.backButton}>
           <Ionicons name="chevron-back" size={26} color="#333" />
         </TouchableOpacity>
 
         <Text style={styles.headerTitle}>Editar Perfil</Text>
 
-        <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
+        <TouchableOpacity onPress={salvar} style={styles.saveButton}>
           <Text style={styles.saveText}>Salvar</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Conteúdo */}
+      {/* FORM */}
       <View style={styles.body}>
         <Text style={styles.label}>Nome</Text>
         <TextInput
@@ -66,7 +86,7 @@ export default function EditProfile() {
           value={senha}
           onChangeText={setSenha}
           secureTextEntry
-          placeholder="Digite uma nova senha"
+          placeholder="Nova senha"
         />
       </View>
     </SafeAreaView>
@@ -80,13 +100,16 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 15,
-  },
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  paddingHorizontal: 20,
+  paddingTop: 10,
+  paddingBottom: 15,
+  backgroundColor: "#EFF3FF",
+  borderBottomWidth: 1,
+  borderBottomColor: "#D9D9D9",
+},
 
   backButton: {
     padding: 5,

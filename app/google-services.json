@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "119346793538",
+    "project_id": "mood-25a91",
+    "storage_bucket": "mood-25a91.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:119346793538:android:49f55cb9d077629e2e31db",
+        "android_client_info": {
+          "package_name": "com.ncl.mindtrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaD2-MUSVhEMY5-JqkxWGsUKz-08fbS0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

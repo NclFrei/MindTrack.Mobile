@@ -25,7 +25,7 @@ export async function getTarefasByUser() {
     throw new Error("Usuário não encontrado no cache.");
   }
 
-  const response = await api.get(`/api/v1/Tarefa/userid/${userId}`);
+  const response = await api.get(`/api/v2/Tarefa/by-user/${userId}`);
   return response.data as TarefaResponse[];
 }
 

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { createTarefa } from "../../src/services/tarefaService";
+import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function NewTask() {
   const [titulo, setTitulo] = useState("");
@@ -26,7 +28,14 @@ export default function NewTask() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+
+      {/* 🔙 Botão de Voltar */}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.replace("/home")}>
+        <Ionicons name="arrow-back" size={24} color="#000" />
+        <Text style={styles.backText}>Voltar</Text>
+      </TouchableOpacity>
+
       <Text style={styles.title}>Nova Tarefa</Text>
 
       <TextInput
@@ -62,12 +71,25 @@ export default function NewTask() {
       <TouchableOpacity style={styles.button} onPress={salvar}>
         <Text style={styles.buttonText}>Salvar</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#F3F6FF" },
+
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  backText: {
+    fontSize: 16,
+    marginLeft: 6,
+    color: "#000",
+    fontWeight: "500",
+  },
+
   title: { fontSize: 24, fontWeight: "700", marginBottom: 20 },
   input: {
     backgroundColor: "#FFF",
